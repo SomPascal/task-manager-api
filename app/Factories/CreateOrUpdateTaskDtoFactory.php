@@ -2,18 +2,18 @@
 
 namespace App\Factories;
 
-use App\Dtos\CreateTaskDto;
+use App\Dtos\CreateOrUpdateTaskDto;
 use App\Enums\TaskPriority;
-use App\Http\Requests\CreateTaskRequest;
+use App\Http\Requests\CreateOrUpdateTaskRequest;
 use Carbon\Carbon;
 
-class CreateTaskDtoFactory
+class CreateOrUpdateTaskDtoFactory
 {
-    public static function fromRequest(CreateTaskRequest $request): CreateTaskDto
+    public static function fromRequest(CreateOrUpdateTaskRequest $request): CreateOrUpdateTaskDto
     {
         $dueDate = $request->validated('due_date');
 
-        return new CreateTaskDto(
+        return new CreateOrUpdateTaskDto(
             title: $request->validated('title'),
             categoryId: $request->validated('category_id'),
             priority: TaskPriority::from($request->validated('priority')),

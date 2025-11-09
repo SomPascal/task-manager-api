@@ -64,5 +64,37 @@ Route::prefix('v1')->name('v1.')->group(function (){
     ->middleware('auth:sanctum')
     ->group(function (){
         Route::post('/', [TaskController::class, 'create'])->name('create');
+
+        Route::get('{task}', [TaskController::class, 'show'])
+        ->whereNumber('task')
+        ->name('show');
+
+        Route::post('{task}/update', [TaskController::class, 'update'])
+        ->whereNumber('task')
+        ->name('update');
+
+        Route::post('{task}/pin', [TaskController::class, 'pin'])
+        ->whereNumber('task')
+        ->name('pin');
+
+        Route::post('{task}/unpin', [TaskController::class, 'unpin'])
+        ->whereNumber('task')
+        ->name('unpin');
+
+        Route::post('{task}/done', [TaskController::class, 'done'])
+        ->whereNumber('task')
+        ->name('done');
+
+        Route::post('{task}/undone', [TaskController::class, 'undone'])
+        ->whereNumber('task')
+        ->name('undone');
+
+        Route::post('{task}/delete', [TaskController::class, 'delete'])
+        ->whereNumber('task')
+        ->name('delete');
+
+        Route::post('{task}/restore', [TaskController::class, 'restore'])
+        ->whereNumber('task')
+        ->name('restore');
     });
 });

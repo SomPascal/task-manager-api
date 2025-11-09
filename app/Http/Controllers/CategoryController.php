@@ -154,11 +154,11 @@ class CategoryController extends Controller
     public function unpin(int $categoryId): JsonResponse
     {
         try {
-            $pinnedCategory = $this->categoryRepository->unpin($categoryId);
+            $unpinnedCategory = $this->categoryRepository->unpin($categoryId);
     
             return $this->success(
                 message: 'Category successfuly unpinned',
-                data: new CategoryResource($pinnedCategory)
+                data: new CategoryResource($unpinnedCategory)
             );
         } catch (ModelNotFoundException $e) {
             return $this->fail(

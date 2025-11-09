@@ -20,7 +20,7 @@ trait Logger
             message: $message,
             context: [
                 ...$context,
-                [
+                ...[
                     'message' => $th->getMessage(),
                     'trace' => $th->getTraceAsString(),
                     'class' => $th::class,

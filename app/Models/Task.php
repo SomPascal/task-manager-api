@@ -36,4 +36,9 @@ class Task extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function deadlineMissed(): ?bool
+    {
+        return filled($this->due_date) ? empty($this->done_at) && $this->due_date->isPast() : null;
+    }
 }

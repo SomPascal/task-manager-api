@@ -6,7 +6,7 @@ use App\Enums\TaskPriority;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CreateTaskRequest extends FormRequest
+class CreateOrUpdateTaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
