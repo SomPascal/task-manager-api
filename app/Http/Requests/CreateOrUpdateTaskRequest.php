@@ -30,7 +30,10 @@ class CreateOrUpdateTaskRequest extends FormRequest
                 'required',
                 'integer',
                 'gte:1',
-                'exists:categories,id'
+
+                Rule::exists('categories', 'id')
+                ->whereNull('deleted_at')
+                ->where('user_id', auth()->id())
             ],
 
             'description' => [

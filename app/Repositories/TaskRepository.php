@@ -3,8 +3,12 @@
 namespace App\Repositories;
 
 use App\Dtos\CreateOrUpdateTaskDto;
+use App\Dtos\FindTaskDto;
 use App\Models\Task;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\Cast\Void_;
 
 class TaskRepository
 {
@@ -14,6 +18,31 @@ class TaskRepository
     public function __construct()
     {
         //
+    }
+
+    public function filter(FindTaskDto $dto): LengthAwarePaginator
+    {
+        $query = Task::query()->where('user_id', auth()->id())
+        ->where('category_id', $dto->categoryId)
+        ->whereDate('created_at', '>=', $dto->fromDate)
+        ->whereDate('created_at', '<=', $dto->endDate);
+
+        if (filled($dto->query)) {
+            $query->where(function (Builder $queryBuilder) use ($dto): void {
+                $queryBuilder->orWhereLike('title', "%$dto->query%")
+                ->orWhereLike('title', "%$dto->query%");
+            });
+        }
+
+        if (filled($dto->priority)) {
+            $query->where('priority', $dto->priority->value);
+        }
+
+        return $query->orderBy('created_at', $dto->sortOrder->value)
+        ->paginate(
+            perPage: $dto->pagination->perPage,
+            page: $dto->pagination->page
+        );
     }
 
     public function findOrFail(int $taskId, array $with = []): Task

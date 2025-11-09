@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\Auth\SanctumGuest;
+use App\Http\Middleware\Locale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,7 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'guest.sanctum' => SanctumGuest::class
+            'guest.sanctum' => SanctumGuest::class,
+        ]);
+
+        $middleware->prepend([
+            Locale::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

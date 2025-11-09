@@ -28,7 +28,7 @@ class UniqueCategory implements ValidationRule
         $user = auth('sanctum')->user();
 
         if (empty($user)) {
-            $fail('You should be logged in');
+            $fail(__('validation.logged_in'));
             return;
         }
 
@@ -36,7 +36,7 @@ class UniqueCategory implements ValidationRule
         ->existsForUser($value, $user->id, $this->ignoreName);
 
         if ($exists) {
-            $fail('This category name already exists');
+            $fail(__('validation.unique_category'));
         }
     }
 }

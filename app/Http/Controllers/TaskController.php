@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Factories\CreateOrUpdateTaskDtoFactory;
+use App\Factories\FindTaskDtoFactory;
 use App\Http\Requests\CreateOrUpdateTaskRequest;
+use App\Http\Requests\FindTaskRequest;
+use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\TaskResource;
 use App\Repositories\TaskRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,6 +18,27 @@ class TaskController extends Controller
         protected TaskRepository $taskRepository
     ) {
         $this->channel = 'task';
+    }
+
+    public function index(FindTaskRequest $request): JsonResponse
+    {
+        try {
+            $findTaskDto = FindTaskDtoFactory::fromRequest($request);
+            $paginatedTasks = $this->taskRepository->filter($findTaskDto);
+    
+            return $this->success(
+                message: 'Tasks successfuly filtered',
+                data: new PaginatedCollection(
+                    resource: $paginatedTasks,
+                    collects: TaskResource::class,
+                    resourceKey: 'tasks'
+                )
+            );
+        } catch (\Throwable $th) {
+            $this->logException('Could not filter tasks', $th);
+
+            return $this->failServerError();
+        }
     }
 
     public function show(int $taskId): JsonResponse

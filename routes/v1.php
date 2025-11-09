@@ -63,6 +63,7 @@ Route::prefix('v1')->name('v1.')->group(function (){
     ->name('tasks.')
     ->middleware('auth:sanctum')
     ->group(function (){
+        Route::get('/', [TaskController::class, 'index'])->name('index');
         Route::post('/', [TaskController::class, 'create'])->name('create');
 
         Route::get('{task}', [TaskController::class, 'show'])
