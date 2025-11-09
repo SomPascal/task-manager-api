@@ -7,6 +7,7 @@ use App\Dtos\Auth\LoginDto;
 use App\Dtos\Auth\RegisterDto;
 use App\Exceptions\Auth\WrongCredentialsException;
 use App\Models\User;
+use App\Repositories\CategoryRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,7 +19,8 @@ class AuthService
      * Create a new class instance.
      */
     public function __construct(
-        protected UserRepository $userRepository
+        protected UserRepository $userRepository,
+        protected CategoryRepository $categoryRepository
     )
     {
         //
@@ -31,6 +33,11 @@ class AuthService
             'name' => $dto->name,
             'password' => Hash::make($dto->password)
         ]);
+
+        $this->categoryRepository->create(
+            categoryName: __('text.my_tasks'),
+            userId: $user->id
+        );
 
         $accessToken = $user->createToken(self::TOKEN_NAME);
 

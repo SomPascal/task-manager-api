@@ -40,11 +40,11 @@ class CategoryRepository
         ->firstOrFail();
     }
 
-    public function create(string $categoryName): Category
+    public function create(string $categoryName, ?int $userId = null): Category
     {
         return Category::create([
             'name' => $categoryName,
-            'user_id' => auth()->id()
+            'user_id' => $userId ?? auth()->id()
         ]);
     }
 
